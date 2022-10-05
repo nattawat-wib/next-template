@@ -7,7 +7,33 @@ import axios from '../utils/axios';
 import { dialogConfirm } from '../components/dialog-confirm';
 import { MotionButton, MotionPaper } from '../components/motion-component';
 
+import { useMemo, useState, useEffect } from 'react';
+
 export default function Home() {
+    const [num, setNum] = useState(1);
+    const [otherState, setOtherState] = useState(1);
+    
+    // const memoValue = (() => {
+    //     console.log('slow function start');
+    //     for(let i=0; i<1000000*2000; i++) {}
+    //     console.log(`slow function success, ${num * 2}`);
+    //     return num * 2;
+    // })();
+
+    const [memoValue, setMemoValue] = useState(1);
+    // useEffect(() => {
+    //     console.log('slow function start');
+    //     for(let i=0; i<1000000*2000; i++) {}
+    //     console.log(`slow function success, ${num * 2}`);
+    //     setMemoValue(num * 2);
+    // }, [num])
+
+    useMemo(() => {
+        console.log('slow function start');
+        for(let i=0; i<1000000*2000; i++) {}
+        console.log(`slow function success, ${num * 2}`);
+        setMemoValue(num * 2);
+    }, [num])
 
     const call = async () => {
         dialogConfirm(true, () => {
@@ -15,6 +41,8 @@ export default function Home() {
             alert('confirm')
         });
     }
+
+    console.log('num: ' + num);
 
     return (
         <>
@@ -25,11 +53,14 @@ export default function Home() {
                 </Stack>
                 <br />
                 <br />
-                <MotionButton
+                <Button> {memoValue} : {otherState} </Button>
+                <Button onClick={() => setNum(prev => prev + 1)}> + num </Button>
+                <Button onClick={() => setOtherState(prev => prev + 1)}> + other </Button>
+                {/* <MotionButton
                     variant='contained'
                     // startIcon={}
                     onClick={call}
-                > Call API </MotionButton>
+                > Call API </MotionButton> */}
 
                 <br />
                 <br />
